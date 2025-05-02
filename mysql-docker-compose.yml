@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: tankmysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: tankmaintainer       # The database Spring Boot uses
+      MYSQL_USER: tankuser                # App-level user
+      MYSQL_PASSWORD: strongpassword      # App-level password
+      MYSQL_ROOT_PASSWORD: rootpassword   # Root password for maintenance
+    ports:
+      - "3306:3306"                        # Expose MySQL port
+    volumes:
+      - mysql_data:/var/lib/mysql         # Persist data
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql_data:
