@@ -1,17 +1,17 @@
 package com.michaelbecker.tankmaintainer.service;
 
 import com.michaelbecker.tankmaintainer.model.AppUser;
-import com.michaelbecker.tankmaintainer.repository.UserRepository;
+import com.michaelbecker.tankmaintainer.repository.AppUserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class AppUserService {
 
-    private final UserRepository userRepository;
+    private final AppUserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    public AppUserService(AppUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
