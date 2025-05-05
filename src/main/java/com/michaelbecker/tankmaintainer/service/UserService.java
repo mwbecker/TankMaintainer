@@ -1,6 +1,6 @@
 package com.michaelbecker.tankmaintainer.service;
 
-import com.michaelbecker.tankmaintainer.model.User;
+import com.michaelbecker.tankmaintainer.model.AppUser;
 import com.michaelbecker.tankmaintainer.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +15,13 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Optional<User> getByUid(String uid) {
+    public Optional<AppUser> getByUid(String uid) {
         return userRepository.findByUid(uid);
     }
 
-    public User getOrCreateUser(String uid, String email, String displayName) {
+    public AppUser getOrCreateUser(String uid, String email, String displayName) {
         return userRepository.findByUid(uid).orElseGet(() -> {
-            User newUser = new User();
+            AppUser newUser = new AppUser();
             newUser.setUid(uid);
             newUser.setEmail(email);
             newUser.setDisplayName(displayName);
@@ -29,7 +29,7 @@ public class UserService {
         });
     }
 
-    public User save(User user) {
+    public AppUser save(AppUser user) {
         return userRepository.save(user);
     }
 }

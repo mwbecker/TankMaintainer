@@ -18,8 +18,8 @@ public class Tank {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
-    
+    private AppUser user;
+
     private String name;
     private BigDecimal volumeGallons;
     private String species;

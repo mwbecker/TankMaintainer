@@ -8,7 +8,8 @@ import java.util.UUID;
 
 @Entity
 @Data
-public class User {
+@Table(name = "app_user") // Renamed to avoid conflict with PostgreSQL reserved keyword
+public class AppUser {
 
     @Id
     @GeneratedValue

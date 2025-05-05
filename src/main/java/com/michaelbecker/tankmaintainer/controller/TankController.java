@@ -1,7 +1,7 @@
 package com.michaelbecker.tankmaintainer.controller;
 
 import com.michaelbecker.tankmaintainer.model.Tank;
-import com.michaelbecker.tankmaintainer.model.User;
+import com.michaelbecker.tankmaintainer.model.AppUser;
 import com.michaelbecker.tankmaintainer.service.TankService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +23,13 @@ public class TankController {
 
     @GetMapping
     public List<Tank> getAll(HttpServletRequest request) {
-        User user = extractUser(request);
+        AppUser user = extractUser(request);
         return tankService.getAllByUser(user);  // Fetch tanks only for the current user
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Tank> getOne(@PathVariable UUID id, HttpServletRequest request) {
-        User user = extractUser(request);
+        AppUser user = extractUser(request);
         return tankService.getById(id)
                 .filter(existing -> existing.getUser().getId().equals(user.getId()))  // Ensure the tank belongs to the user
                 .map(ResponseEntity::ok)
@@ -38,14 +38,14 @@ public class TankController {
 
     @PostMapping
     public Tank create(@RequestBody Tank tank, HttpServletRequest request) {
-        User user = extractUser(request);
+        AppUser user = extractUser(request);
         tank.setUser(user);  // Set the current user for the new tank
         return tankService.save(tank);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Tank> update(@PathVariable UUID id, @RequestBody Tank updatedTank, HttpServletRequest request) {
-        User user = extractUser(request);
+        AppUser user = extractUser(request);
         return tankService.getById(id)
                 .filter(existing -> existing.getUser().getId().equals(user.getId()))  // Check if the tank belongs to the user
                 .map(existing -> {
@@ -58,7 +58,7 @@ public class TankController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id, HttpServletRequest request) {
-    User user = extractUser(request);
+    AppUser user = extractUser(request);
 
     // Fetch the tank, check if it exists, and if the user matches.
     Optional<Tank> optionalTank = tankService.getById(id);
@@ -81,7 +81,7 @@ public class TankController {
     }
 
     // Helper method to extract the current user from the request
-    private User extractUser(HttpServletRequest request) {
-        return (User) request.getAttribute("firebaseUser");  // Extract the user info from the request attribute
+    private AppUser extractUser(HttpServletRequest request) {
+        return (AppUser) request.getAttribute("firebaseUser");  // Extract the user info from the request attribute
     }
 }
