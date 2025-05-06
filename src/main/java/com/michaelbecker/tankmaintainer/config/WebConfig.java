@@ -1,11 +1,12 @@
 package com.michaelbecker.tankmaintainer.config;
 
+import com.michaelbecker.tankmaintainer.security.FirebaseAuthenticationFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.lang.NonNull;
-
 
 @Configuration
 public class WebConfig {
@@ -22,5 +23,15 @@ public class WebConfig {
                         .allowCredentials(true);
             }
         };
+    }
+
+    @Bean
+    public FilterRegistrationBean<FirebaseAuthenticationFilter> firebaseFilterRegistration(
+            FirebaseAuthenticationFilter filter) {
+        FilterRegistrationBean<FirebaseAuthenticationFilter> registration = new FilterRegistrationBean<>();
+        registration.setFilter(filter);
+        registration.addUrlPatterns("/api/*"); // Secure API routes
+        registration.setOrder(1); // Run early in the filter chain
+        return registration;
     }
 }

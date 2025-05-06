@@ -3,6 +3,8 @@ package com.michaelbecker.tankmaintainer.service;
 import com.michaelbecker.tankmaintainer.model.Tank;
 import com.michaelbecker.tankmaintainer.repository.TankRepository;
 import org.springframework.stereotype.Service;
+import com.michaelbecker.tankmaintainer.model.AppUser;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -31,5 +33,9 @@ public class TankService {
 
     public void delete(UUID id) {
         tankRepository.deleteById(id);
+    }
+
+    public List<Tank> getAllByUser(AppUser user) {
+        return tankRepository.findByUser(user);
     }
 }
