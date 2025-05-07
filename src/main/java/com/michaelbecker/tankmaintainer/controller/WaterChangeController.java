@@ -1,6 +1,9 @@
 package com.michaelbecker.tankmaintainer.controller;
 
+import com.michaelbecker.tankmaintainer.dto.WaterChangeRequest;
+import com.michaelbecker.tankmaintainer.model.Tank;
 import com.michaelbecker.tankmaintainer.model.WaterChange;
+import com.michaelbecker.tankmaintainer.repository.TankRepository;
 import com.michaelbecker.tankmaintainer.service.WaterChangeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +16,11 @@ import java.util.UUID;
 public class WaterChangeController {
 
     private final WaterChangeService service;
+    private final TankRepository tankRepository;
 
-    public WaterChangeController(WaterChangeService service) {
+    public WaterChangeController(WaterChangeService service, TankRepository tankRepository) {
         this.service = service;
+        this.tankRepository = tankRepository;
     }
 
     @GetMapping
@@ -33,8 +38,18 @@ public class WaterChangeController {
     }
 
     @PostMapping
-    public WaterChange create(@RequestBody WaterChange change) {
-        return service.save(change);
+    public ResponseEntity<WaterChange> create(@RequestBody WaterChangeRequest request) {
+        Tank tank = tankRepository.findById(request.getTankId())
+                .orElseThrow(() -> new IllegalArgumentException("Tank not found with id: " + request.getTankId()));
+
+        WaterChange change = new WaterChange();
+        change.setTank(tank);
+        change.setDate(request.getDate());
+        change.setVolumeGallons(request.getVolumeGallons());
+        change.setNotes(request.getNotes());
+
+        WaterChange saved = service.save(change);
+        return ResponseEntity.ok(saved);
     }
 
     @DeleteMapping("/{id}")
