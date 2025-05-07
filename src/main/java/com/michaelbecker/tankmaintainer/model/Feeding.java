@@ -6,7 +6,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Data
@@ -18,7 +18,7 @@ public class Feeding {
 
     @ManyToOne
     @JoinColumn(name = "tank_id")
-    @JsonBackReference
+    @JsonIgnore
     private Tank tank;
 
     private LocalDateTime timestamp;
