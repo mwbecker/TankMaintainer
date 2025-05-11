@@ -2,7 +2,7 @@ package com.michaelbecker.tankmaintainer.dto;
 
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 public class TankParamRequest {
@@ -11,5 +11,5 @@ public class TankParamRequest {
     public BigDecimal value;
     public String unit;
     public String notes;
-    public LocalDateTime timestamp;
+    public OffsetDateTime timestamp;
 }

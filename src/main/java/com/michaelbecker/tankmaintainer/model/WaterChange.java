@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,7 +22,7 @@ public class WaterChange {
     @JsonIgnore
     private Tank tank;
 
-    private LocalDateTime date;
+    private OffsetDateTime date;
 
     // Use gallons since you're using imperial units
     private BigDecimal volumeGallons;

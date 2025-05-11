@@ -1,7 +1,7 @@
 package com.michaelbecker.tankmaintainer.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class WaterChangeRequest {
     private UUID tankId;
-    private LocalDateTime date;
+    private OffsetDateTime date;
     private BigDecimal volumeGallons;
     private String notes;
 }

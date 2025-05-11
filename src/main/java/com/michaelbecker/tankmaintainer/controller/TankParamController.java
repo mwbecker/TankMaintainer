@@ -10,7 +10,7 @@ import com.michaelbecker.tankmaintainer.service.TankService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,7 +52,7 @@ public class TankParamController {
         param.setValue(request.value);
         param.setUnit(request.unit);
         param.setNotes(request.notes);
-        param.setTimestamp(request.timestamp != null ? request.timestamp : LocalDateTime.now());
+        param.setTimestamp(request.timestamp != null ? request.timestamp : OffsetDateTime.now());
 
         return tankParamService.save(param);
     }

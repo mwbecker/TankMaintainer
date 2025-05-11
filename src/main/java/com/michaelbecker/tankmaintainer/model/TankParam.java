@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,7 +22,7 @@ public class TankParam {
     @JsonIgnore
     private Tank tank;
 
-    private LocalDateTime timestamp;
+    private OffsetDateTime timestamp;
 
     // The type of parameter being tracked (pH, KH, ammonia, etc.)
     @Enumerated(EnumType.STRING)
