@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Data
@@ -19,7 +19,7 @@ public class TankParam {
 
     @ManyToOne
     @JoinColumn(name = "tank_id")
-    @JsonIgnore
+    @JsonBackReference
     private Tank tank;
 
     private OffsetDateTime timestamp;
