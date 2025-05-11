@@ -35,9 +35,5 @@ public class Tank {
     @OneToMany(mappedBy = "tank", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<WaterChange> waterChanges;
-
-    @OneToMany(mappedBy = "tank", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<Feeding> feedings;
         
 }
