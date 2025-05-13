@@ -1,6 +1,7 @@
 package com.michaelbecker.tankmaintainer.service;
 
 import com.michaelbecker.tankmaintainer.model.TankParam;
+import com.michaelbecker.tankmaintainer.model.AppUser;
 import com.michaelbecker.tankmaintainer.repository.TankParamRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +18,8 @@ public class TankParamService {
         this.tankParamRepository = tankParamRepository;
     }
 
-    public List<TankParam> getAll() {
-        return tankParamRepository.findAll();
+    public List<TankParam> getAll(AppUser user) {
+        return tankParamRepository.findByUser(user);
     }
 
     public Optional<TankParam> getById(UUID id) {

@@ -1,6 +1,7 @@
 package com.michaelbecker.tankmaintainer.service;
 
 import com.michaelbecker.tankmaintainer.model.WaterChange;
+import com.michaelbecker.tankmaintainer.model.AppUser;
 import com.michaelbecker.tankmaintainer.repository.WaterChangeRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +18,8 @@ public class WaterChangeService {
         this.waterChangeRepository = waterChangeRepository;
     }
 
-    public List<WaterChange> getAll() {
-        return waterChangeRepository.findAll();
+    public List<WaterChange> getAll(AppUser user) {
+        return waterChangeRepository.findByUser(user);
     }
 
     public Optional<WaterChange> getById(UUID id) {
