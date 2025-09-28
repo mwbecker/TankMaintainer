@@ -7,13 +7,10 @@ import com.michaelbecker.tankmaintainer.model.TankParam;
 import com.michaelbecker.tankmaintainer.model.AppUser;
 import com.michaelbecker.tankmaintainer.service.TankParamService;
 import com.michaelbecker.tankmaintainer.service.TankService;
-import com.michaelbecker.tankmaintainer.service.AppUserService;
-import com.google.firebase.auth.FirebaseToken;
+import com.michaelbecker.tankmaintainer.util.SecurityUtils;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
@@ -26,17 +23,17 @@ public class TankParamController {
 
     private final TankParamService tankParamService;
     private final TankService tankService;
-    private final AppUserService appUserService;
+    private final SecurityUtils securityUtils;
 
-    public TankParamController(TankParamService tankParamService, TankService tankService, AppUserService appUserService) {
+    public TankParamController(TankParamService tankParamService, TankService tankService, SecurityUtils securityUtils) {
         this.tankParamService = tankParamService;
         this.tankService = tankService;
-        this.appUserService = appUserService;
+        this.securityUtils = securityUtils;
     }
 
     @GetMapping
     public List<TankParam> getAll(@RequestParam(required = false) UUID tankId, HttpServletRequest request) {
-        AppUser user = extractUser(request);
+        AppUser user = securityUtils.extractUser(request);
         if (tankId != null) {
             tankService.getById(tankId)
                     .filter(t -> t.getUser().getId().equals(user.getId()))
@@ -48,7 +45,7 @@ public class TankParamController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TankParam> getOne(@PathVariable UUID id, HttpServletRequest request) {
-        AppUser user = extractUser(request);
+        AppUser user = securityUtils.extractUser(request);
         return tankParamService.getById(id)
                 .filter(param -> param.getTank().getUser().getId().equals(user.getId()))
                 .map(ResponseEntity::ok)
@@ -57,7 +54,7 @@ public class TankParamController {
 
     @PostMapping
     public ResponseEntity<TankParam> create(@RequestBody TankParamRequest request, HttpServletRequest httpRequest) {
-        AppUser user = extractUser(httpRequest);
+        AppUser user = securityUtils.extractUser(httpRequest);
         Tank tank = tankService.getById(request.tankId)
                 .filter(t -> t.getUser().getId().equals(user.getId()))
                 .orElseThrow(() -> new IllegalArgumentException("Tank not found or access denied"));
@@ -75,7 +72,7 @@ public class TankParamController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id, HttpServletRequest request) {
-        AppUser user = extractUser(request);
+        AppUser user = securityUtils.extractUser(request);
         return tankParamService.getById(id)
                 .filter(param -> param.getTank().getUser().getId().equals(user.getId()))
                 .map(param -> {
@@ -83,18 +80,5 @@ public class TankParamController {
                     return ResponseEntity.noContent().<Void>build();
                 })
                 .orElse(ResponseEntity.status(403).build());
-    }
-
-    private AppUser extractUser(HttpServletRequest request) {
-        FirebaseToken firebaseToken = (FirebaseToken) request.getAttribute("firebaseUser");
-        if (firebaseToken == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authentication required");
-        }
-
-        return appUserService.getOrCreateUser(
-                firebaseToken.getUid(),
-                firebaseToken.getEmail(),
-                firebaseToken.getName()
-        );
     }
 }
