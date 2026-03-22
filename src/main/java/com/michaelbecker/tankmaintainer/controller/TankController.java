@@ -26,9 +26,19 @@ public class TankController {
     }
 
     @GetMapping
-    public List<Tank> getAll(HttpServletRequest request) {
+    public List<Tank> getAll(
+            @RequestParam(required = false) String q,
+            HttpServletRequest request) {
         AppUser user = securityUtils.extractUser(request);
-        return tankService.getAllByUser(user);
+        return tankService.listActiveByUser(user, q);
+    }
+
+    @GetMapping("/archived")
+    public List<Tank> getArchived(
+            @RequestParam(required = false) String q,
+            HttpServletRequest request) {
+        AppUser user = securityUtils.extractUser(request);
+        return tankService.listArchivedByUser(user, q);
     }
 
     @GetMapping("/{id}")
@@ -44,6 +54,7 @@ public class TankController {
     public Tank create(@RequestBody Tank tank, HttpServletRequest request) {
         AppUser user = securityUtils.extractUser(request);
         tank.setUser(user);
+        tank.setArchived(false);
         return tankService.save(tank);
     }
 
@@ -55,6 +66,7 @@ public class TankController {
                 .map(existing -> {
                     updatedTank.setId(existing.getId());
                     updatedTank.setUser(existing.getUser());
+                    updatedTank.setArchived(existing.isArchived());
                     return ResponseEntity.ok(tankService.save(updatedTank));
                 })
                 .orElse(ResponseEntity.status(403).build());
@@ -76,5 +88,21 @@ public class TankController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping("/{id}/archive")
+    public ResponseEntity<Tank> archive(@PathVariable UUID id, HttpServletRequest request) {
+        AppUser user = securityUtils.extractUser(request);
+        return tankService.archive(id, user)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/{id}/reactivate")
+    public ResponseEntity<Tank> reactivate(@PathVariable UUID id, HttpServletRequest request) {
+        AppUser user = securityUtils.extractUser(request);
+        return tankService.reactivate(id, user)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

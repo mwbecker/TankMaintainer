@@ -2,6 +2,7 @@ package com.michaelbecker.tankmaintainer.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,6 +28,10 @@ public class Tank {
     private BigDecimal volumeGallons;
     private String species;
     private String notes;
+
+    @Column(nullable = false)
+    @ColumnDefault("false")
+    private boolean archived;
 
     @OneToMany(mappedBy = "tank", cascade = CascadeType.ALL)
     @JsonManagedReference

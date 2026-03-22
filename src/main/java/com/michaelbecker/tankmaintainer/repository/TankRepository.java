@@ -11,4 +11,8 @@ import java.util.UUID;
 public interface TankRepository extends JpaRepository<Tank, UUID> {
     Optional<Tank> findByName(String name);
     List<Tank> findByUser(AppUser user);
+
+    List<Tank> findByUserAndArchived(AppUser user, boolean archived);
+
+    List<Tank> findByUserAndArchivedAndNameContainingIgnoreCase(AppUser user, boolean archived, String name);
 }
