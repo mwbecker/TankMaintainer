@@ -33,6 +33,12 @@ public class TankController {
         return tankService.listActiveByUser(user, q);
     }
 
+    @GetMapping("/aou")
+    public ResponseEntity<Void> keepAlive() {
+        tankService.getAll();
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/archived")
     public List<Tank> getArchived(
             @RequestParam(required = false) String q,
