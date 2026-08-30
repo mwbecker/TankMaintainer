@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "automation.token",
+      "type": "java.lang.String",
+      "description": "Shared secret for authenticating automation endpoints (e.g. overdue maintenance alerts). Set via AUTOMATION_TOKEN environment variable."
+    }
+  ]
+}

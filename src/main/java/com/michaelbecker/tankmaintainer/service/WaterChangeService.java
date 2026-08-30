@@ -42,6 +42,12 @@ public class WaterChangeService {
         waterChangeRepository.deleteById(id);
     }
 
+    public Optional<LocalDate> getLastChangeDate(UUID tankId) {
+        return waterChangeRepository.findByTankId(tankId).stream()
+                .max(Comparator.comparing(WaterChange::getDate))
+                .map(change -> change.getDate().toLocalDate());
+    }
+
     public LocalDate predictNextMaintenance(UUID tankId) {
         List<WaterChange> changes = waterChangeRepository.findByTankId(tankId);
 
